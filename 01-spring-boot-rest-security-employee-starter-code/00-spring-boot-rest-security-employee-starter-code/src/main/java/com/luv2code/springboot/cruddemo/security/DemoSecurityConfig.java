@@ -17,10 +17,23 @@ import javax.sql.DataSource;
 @Configuration
 public class DemoSecurityConfig {
 
+    //Retrieving data from database where the database table names are as per our requirements
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource){
-        return new JdbcUserDetailsManager(dataSource);
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        jdbcUserDetailsManager.setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?");
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select user_id,role from roles where user_id=?");
+        return jdbcUserDetailsManager;
     }
+
+
+    //    Retriewing users from Database
+//    @Bean
+//    public UserDetailsManager userDetailsManager(DataSource dataSource){
+//        return new JdbcUserDetailsManager(dataSource);
+//    }
+
+//    Adding users manually
 //   @Bean
 //   public InMemoryUserDetailsManager userDetailsManager(){
 //        UserDetails mahesh= User.builder()
